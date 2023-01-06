@@ -7,23 +7,31 @@ module.exports = {
   async execute(interaction, client, props) {
     const { gSheets, auth, spreadsheetId } = props;
 
-    interaction.deferReply();
+    try {
+      interaction.deferReply();
 
-    const sheet = await gSheets.spreadsheets.values.get({
-      auth,
-      spreadsheetId,
-      range: "Sheet1",
-    });
-    const contentList = sheet.data.values;
+      const sheet = await gSheets.spreadsheets.values.get({
+        auth,
+        spreadsheetId,
+        range: "Sheet1",
+      });
+      const contentList = sheet.data.values;
 
-    let message = `${contentList.length-1} rows of data:`;
+      let message = `${contentList.length - 1} rows of data:`;
 
-    //content = [name, type, date]
-    for (let i = 1; i < contentList.length; i++) {
-      message = message.concat("\n", `${i}) **${contentList[i][0]}**  <${contentList[i][1]}>  [${contentList[i][2]}]`);
+      //content = [name, type, date]
+      for (let i = 1; i < contentList.length; i++) {
+        message = message.concat(
+          "\n",
+          `${i}) **${contentList[i][0]}**  <${contentList[i][1]}>  [${contentList[i][2]}]`
+        );
+      }
+
+      interaction.editReply(message);
+    } catch (error) {
+      console.error(error);
+      interaction.editReply("Failed to fetch data at this time :(");
     }
-
-    interaction.editReply(message);
   },
 };
 
