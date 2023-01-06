@@ -20,6 +20,7 @@ module.exports = (client) => {
       }
     }
 
+    console.log("Started refreshing application (/) commands.");
     const clientId = "1060722167794372618";
     const rest = new REST({ version: "9" }).setToken(
       process.env.DISCORD_BOT_TOKEN
